@@ -1,34 +1,31 @@
-# Streamlit App for Machine Learning Model Deployment
+# rf_streamlit.py
 import streamlit as st
+import joblib
 import numpy as np
 
-# Placeholder function to simulate model prediction
-def predict(sepal_length, sepal_width, petal_length, petal_width):
-    # Replace this with actual model prediction logic
-    # For now, it randomly predicts one of the Iris species
-    species = np.random.choice(["Iris-setosa", "Iris-versicolor", "Iris-virginica"])
-    return species
+# Load the machine learning model
+model = joblib.load('rf_model.pkl')
 
 def main():
-    st.title("Machine Learning Model Deployment")
+    st.title('Machine Learning Model Deployment')
 
-    # Input fields for features
-    st.header("Input Features")
-    sepal_length = st.number_input("sepal_length", value=3.28)
-    sepal_width = st.number_input("sepal_width", value=4.72)
-    petal_length = st.number_input("petal_length", value=3.05)
-    petal_width = st.number_input("petal_width", value=2.12)
+    # Add user input components for 5 features
+    sepal_length = st.slider('sepal_length', min_value=0.0, max_value=10.0, value=0.1)
+    sepal_width = st.slider('sepal_width', min_value=0.0, max_value=10.0, value=0.1)
+    patal_length = st.slider('patal_length', min_value=0.0, max_value=10.0, value=0.1)
+    patal_width = st.slider('patal_width', min_value=0.0, max_value=10.0, value=0.1)
 
-    # Make Prediction button
-    if st.button("Make Prediction"):
-        # Prepare input data
-        input_data = np.array([sepal_length, sepal_width, petal_length, petal_width]).reshape(1, -1)
-        
-        # Get prediction
-        prediction = predict(sepal_length, sepal_width, petal_length, petal_width)
-        
-        # Display prediction
-        st.success(f"The prediction is: {prediction}")
+    if st.button('Make Prediction'):
+        features = [sepal_length,sepal_width,patal_length,patal_width]
+        result = make_prediction(features)
+        st.success(f'The prediction is: {result}')
+
+def make_prediction(features):
+    # Use the loaded model to make predictions
+    # Replace this with the actual code for your model
+    input_array = np.array(features).reshape(1,-1)
+    prediction = model.predict(input_array)
+    return prediction[0]
 
 if __name__ == '__main__':
     main()
